@@ -21,7 +21,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "published")
@@ -32,9 +32,11 @@ public class User {
     private List<Phone> phones;
 
     @CreationTimestamp
+    @Column(name = "created", nullable = false, updatable = false)
     private LocalDateTime created;
 
     @UpdateTimestamp
-    private LocalDateTime updated;
+    @Column(name = "modified")
+    private LocalDateTime modified;
 
 }

@@ -3,6 +3,7 @@ package com.demo.smartjob.mapper;
 import com.demo.smartjob.dto.PhoneDto;
 import com.demo.smartjob.dto.UserGetDto;
 import com.demo.smartjob.dto.UserPostDto;
+import com.demo.smartjob.dto.UserPutDto;
 import com.demo.smartjob.entity.Phone;
 import com.demo.smartjob.entity.User;
 import org.mapstruct.Mapper;
@@ -15,4 +16,6 @@ public interface MapStructMapper {
     UserPostDto userToUserPostDto(User user);
     UserGetDto userToUserGetDto(User user);
     User userPostDtoToUser(UserPostDto userPostDto);
+
+    User userPutDtoToUser(UserPutDto user);
 }
