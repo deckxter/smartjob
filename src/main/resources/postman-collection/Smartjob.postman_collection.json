@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "8fabdce7-4d81-4777-bf9c-42c5e00e5c39",
+		"name": "Smartjob",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1060478"
+	},
+	"item": [
+		{
+			"name": "Get User By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/smartjob/users/3ba492ba-f719-4d93-a790-6593884ac642",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"smartjob",
+						"users",
+						"3ba492ba-f719-4d93-a790-6593884ac642"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User By Email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/smartjob/users/email/juan@rodriguez.org",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"smartjob",
+						"users",
+						"email",
+						"juan@rodriguez.org"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Juan Rodriguez\",\n    \"email\": \"juan@rodriguez.org\",\n    \"password\": \"hunter2\",\n    \"phones\": [\n        {\n            \"number\": \"1234567\",\n            \"cityCode\": \"1\",\n            \"countryCode\": \"57\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/smartjob/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"smartjob",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/smartjob/users/9e009e79-ecdb-48f4-824a-6312181438e0",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"smartjob",
+						"users",
+						"9e009e79-ecdb-48f4-824a-6312181438e0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
