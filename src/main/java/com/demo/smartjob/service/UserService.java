@@ -16,7 +16,8 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        return this.userRepository.save(user);
+        User userPersisted = this.userRepository.save(user);
+        return userPersisted;
     }
 
     public User getUserById(UUID id) {
