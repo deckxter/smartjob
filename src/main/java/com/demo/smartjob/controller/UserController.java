@@ -1,5 +1,7 @@
 package com.demo.smartjob.controller;
 
+import com.demo.smartjob.dto.UserGetDto;
+import com.demo.smartjob.dto.UserPostDto;
 import com.demo.smartjob.entity.User;
 import com.demo.smartjob.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,14 +20,14 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    private ResponseEntity<User> createUser(@RequestBody User user) {
-        User userCreated = this.userService.createUser(user);
+    private ResponseEntity<UserGetDto> createUser(@RequestBody UserPostDto userPostDto) {
+        UserGetDto userCreated = this.userService.createUser(userPostDto);
         return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{id}")
-    private ResponseEntity<User> getUserById(@PathVariable("id") UUID id) {
-        User userFromDb = this.userService.getUserById(id);
-        return new ResponseEntity<>(userFromDb, HttpStatus.CREATED);
+    private ResponseEntity<UserGetDto> getUserById(@PathVariable("id") UUID id) {
+        UserGetDto userGetDto = this.userService.getUserById(id);
+        return new ResponseEntity<>(userGetDto, HttpStatus.CREATED);
     }
 }
