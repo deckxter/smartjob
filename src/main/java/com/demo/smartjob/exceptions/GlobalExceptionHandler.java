@@ -28,4 +28,10 @@ public class GlobalExceptionHandler {
     public ErrorDetails badPasswordException(BadPasswordException ex) {
         return new ErrorDetails(KEY_MESSAGE, ex.getMessage());
     }
+
+    @ExceptionHandler(value = {BadEmailException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorDetails badEmailException(BadEmailException ex) {
+        return new ErrorDetails(KEY_MESSAGE, ex.getMessage());
+    }
 }

@@ -16,7 +16,6 @@ public class UserPostDto {
     private String name;
 
     @NotNull
-    @Email
     private String email;
 
     @NotNull
