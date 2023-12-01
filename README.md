@@ -1,5 +1,5 @@
 # Users API
-Basically there are 4 methods:
+Basically there are 5 methods:
 - Get User By Id
 - Get User By Email
 - Post User, for create a new one
