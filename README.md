@@ -90,6 +90,9 @@ To start the application run:
    ```
    It deletes the user by the id
 
+H2 Web Client, to check data persisted:
+http://localhost:8080/h2-ui/login.jsp
+
 Also Swagger has been added, you can found it here:
 
 http://localhost:8080/swagger-ui/index.html#/
