@@ -4,6 +4,7 @@ import com.demo.smartjob.dto.UserGetDto;
 import com.demo.smartjob.dto.UserPostDto;
 import com.demo.smartjob.dto.UserPutDto;
 import com.demo.smartjob.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public UserGetDto createUser(@RequestBody UserPostDto userPostDto) {
+    public UserGetDto createUser(@Valid @RequestBody UserPostDto userPostDto) {
         return this.userService.createUser(userPostDto);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public UserGetDto updateUser(@RequestBody UserPutDto userPutDto) {
+    public UserGetDto updateUser(@Valid @RequestBody UserPutDto userPutDto) {
         return this.userService.updateUser(userPutDto);
     }
 }

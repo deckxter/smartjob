@@ -1,6 +1,8 @@
 package com.demo.smartjob.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -13,5 +15,6 @@ public class UserPutDto {
 
     private String name;
     private String email;
+    private String password;
     private List<PhoneDto> phones;
 }

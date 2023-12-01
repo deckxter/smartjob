@@ -3,20 +3,33 @@ package com.demo.smartjob.service;
 import com.demo.smartjob.dto.UserGetDto;
 import com.demo.smartjob.dto.UserPostDto;
 import com.demo.smartjob.dto.UserPutDto;
-import com.demo.smartjob.entity.Phone;
 import com.demo.smartjob.entity.User;
+import com.demo.smartjob.exceptions.BadPasswordException;
+import com.demo.smartjob.exceptions.EmailAlreadyExistsException;
 import com.demo.smartjob.exceptions.ResourceNotFoundException;
 import com.demo.smartjob.mapper.MapStructMapper;
 import com.demo.smartjob.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
+    @Value("${app.password.regexp}")
+    private String passwordRegex;
+
+    @Value("${app.email.regexp}")
+    private String emailRegex;
+
     private final UserRepository userRepository;
     private final MapStructMapper mapStructMapper;
+
+    private final String EMAIL_ALREADY_EXIST = "Email already exists";
+    private final String EMAIL_NOT_FOUND = "User with email not found";
+    private final String USER_ID_NOT_FOUND = "User id not found";
+    private final String BAD_REGEXP_PASSWORD = "Password doesn't meet the minimum requirements";
 
     public UserService(UserRepository userRepository, MapStructMapper mapStructMapper) {
         this.userRepository = userRepository;
@@ -24,6 +37,10 @@ public class UserService {
     }
 
     public UserGetDto createUser(UserPostDto userPostDto) {
+        if(emailAlreadyExists(userPostDto.getEmail())) throw new EmailAlreadyExistsException(EMAIL_ALREADY_EXIST);
+
+        if(!passwordMeetsRegexp(userPostDto.getPassword())) throw new BadPasswordException(BAD_REGEXP_PASSWORD);
+
         User userToBePersisted = mapStructMapper.userPostDtoToUser(userPostDto);
         User userPersisted = this.userRepository.save(userToBePersisted);
         return mapStructMapper.userToUserGetDto(userPersisted);
@@ -31,7 +48,7 @@ public class UserService {
 
     public UserGetDto getUserById(UUID id) {
         User user = this.userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User with id: " +id+  " not found"));
+                () -> new ResourceNotFoundException(USER_ID_NOT_FOUND));
 
         return  mapStructMapper.userToUserGetDto(user);
     }
@@ -39,24 +56,40 @@ public class UserService {
     public UserGetDto getUserByEmail(String email) {
         User user = this.userRepository.findByEmail(email);
         if(user == null)
-            throw new ResourceNotFoundException("User with email: " +email+  " not found");
+            throw new ResourceNotFoundException(EMAIL_NOT_FOUND);
 
         return mapStructMapper.userToUserGetDto(user);
     }
 
     public void deleteUserById(UUID id) {
         User user = this.userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User with id: " +id+  " not found"));
+                () -> new ResourceNotFoundException(USER_ID_NOT_FOUND));
 
         userRepository.delete(user);
     }
 
     public UserGetDto updateUser(UserPutDto userPutDto) {
+        //First: check user exists
         User user = this.userRepository.findById(userPutDto.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("User with id: " +userPutDto.getId()+  " not found"));
+                () -> new ResourceNotFoundException(USER_ID_NOT_FOUND));
+
+        //Second: Check email from dto, already exists in a different user
+        User userEmail = this.userRepository.findByEmail(userPutDto.getEmail());
+        if(user.getId() != userEmail.getId()) throw new EmailAlreadyExistsException(EMAIL_ALREADY_EXIST);
+
+        //Third: Password matches regexp
+        if(!passwordMeetsRegexp(userPutDto.getPassword())) throw new BadPasswordException(BAD_REGEXP_PASSWORD);
 
         User userToBePersisted = mapStructMapper.userPutDtoToUser(userPutDto);
         User userPersisted = this.userRepository.save(userToBePersisted);
         return mapStructMapper.userToUserGetDto(userPersisted);
+    }
+
+    public boolean emailAlreadyExists(String email) {
+        return (userRepository.findByEmail(email) != null);
+    }
+
+    public boolean passwordMeetsRegexp(String password) {
+        return Pattern.compile(passwordRegex).matcher(password).matches();
     }
 }

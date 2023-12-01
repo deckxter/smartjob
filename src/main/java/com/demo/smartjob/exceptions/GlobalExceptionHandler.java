@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,14 +17,15 @@ public class GlobalExceptionHandler {
         return new ErrorDetails(KEY_MESSAGE, ex.getMessage());
     }
 
-    //TODO Pending to manage constraint violation exception for email
-    @ExceptionHandler(value = {})
+    @ExceptionHandler(value = {EmailAlreadyExistsException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorDetails constraintViolationException(ConstraintViolationException ex) {
-        StringBuilder errorBuffer = new StringBuilder("Error in these constraints: ");
-        for (ConstraintViolation violation : ex.getConstraintViolations()) {
-            errorBuffer.append(violation.getMessage());
-        }
-        return new ErrorDetails(KEY_MESSAGE, errorBuffer.toString());
+    public ErrorDetails emailAlreadyExistsException(EmailAlreadyExistsException ex) {
+        return new ErrorDetails(KEY_MESSAGE, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {BadPasswordException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorDetails badPasswordException(BadPasswordException ex) {
+        return new ErrorDetails(KEY_MESSAGE, ex.getMessage());
     }
 }
